@@ -30,7 +30,7 @@
     </tr>
 </table>
 
-<div id="pagingButtons">Pages</div>
+<div id="paging_buttons">Pages</div>
 
 <script>
     function showList(page_number){
@@ -62,10 +62,10 @@
                     + item.level + "</td><td>"
                     + new Date(item.birthday).toLocaleDateString() + "</td><td>"
                     + item.banned + "</td><td>"
-                    + "<button id='button_edit_'" + item.id + "'>"
+                    + "<button id='button_edit_" + item.id + "' onclick='editAcc(" + item.id + ")'>"
                     + "<img src='/img/edit.png'>"
-                    + "</td>" + "</td><td>"
-                    + "<button id='button_delete_'" + item.id + "'>"
+                    + "</button>" + "</td><td>"
+                    + "<button id='button_delete_" + item.id + "' onclick='deleteAcc(" + item.id + ")'>"
                     + "<img src='/img/delete.png'>"
                     + "</button>" + "</td>"
                 ).appendTo("#table_1")
@@ -87,11 +87,11 @@
                 .attr('id', "paging_button_" + i)
                 .attr('onclick', "showList(" + i + ")")
                 .addClass('pgn-bnt-styled');
-            $('#pagingButtons').append(btn);
+            $('#paging_buttons').append(btn);
         }
 
         let identifier = "#paging_button_" + page_number;
-        $(identifier).css('color', "red");
+        $(identifier).css('color', "rgb(255,0,0)");
     }
 
     function getTotalCount() {
@@ -105,8 +105,44 @@
             }
         })
 
-        console.log(res);
         return res;
+    }
+
+    function deleteAcc(id) {
+        let  url = "/rest/players/" + id;
+        $.ajax({
+            url: url,
+            type: 'DELETE',
+            success: function () {
+                showList(getCurrentPage())
+            }
+        });
+    }
+
+    function editAcc(id) {
+        let identifier_edit = "#button_edit_" + id;
+        let identifier_delete = "#button_delete_" + id;
+
+        $(identifier_delete).remove();
+
+        let save_image_tag = "<img src='/img/save.png'>";
+        $(identifier_edit).html(save_image_tag);
+
+        let current_tr_element = $(identifier_edit).parent().parent();
+        let children = current_tr_element.children();
+        let td_name = children[1];
+        td_name.innerHTML = "<input id='input_name_" + id + "' type='text' value ='" + td_name.innerHTML + "'>";
+
+    }
+
+    function getCurrentPage() {
+        let current_page = 1;
+        $('button:parent(div)').each(function (){
+            if ($(this).css('color') === 'rgb(255,0,0)'){
+                current_page = $(this).text();
+            }
+        });
+        return parseInt(current_page) - 1;
     }
 </script>
 
