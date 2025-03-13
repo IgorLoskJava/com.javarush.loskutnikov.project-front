@@ -149,6 +149,12 @@
         td_profession.innerHTML = getDropDownProfessionHtml(id);
         $(profession_id).val(profession_current_value).change();
 
+        let td_banned = children[7];
+        let banned_id = "#select_banned_" + id;
+        let banned_current_value = td_banned.innerHTML;
+        td_banned.innerHTML = getDropDownbannedHtml(id);
+        $(banned_id).val(banned_current_value).change();
+
     }
 
     function getDropDownRaceHtml(id) {
@@ -177,6 +183,15 @@
             + "<option value='NAZGUL'>NAZGUL</option>"
             + "<option value='WARLOCK'>WARLOCK</option>"
             + "<option value='DRUID'>DRUID</option>"
+            + "<select>";
+    }
+
+    function getDropDownbannedHtml(id) {
+        let banned_id = "select_banned_" + id;
+        return "<label for='banned'></label>"
+            + "<select id=" + banned_id + " name='banned'>"
+            + "<option value='false'>false</option>"
+            + "<option value='true'>true</option>"
             + "<select>";
     }
 
